@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelMate", "TravelMate\TravelMate.csproj", "{6FE18BE5-F7C4-4568-88FE-4A2D89D81A69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FE18BE5-F7C4-4568-88FE-4A2D89D81A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FE18BE5-F7C4-4568-88FE-4A2D89D81A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FE18BE5-F7C4-4568-88FE-4A2D89D81A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FE18BE5-F7C4-4568-88FE-4A2D89D81A69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97686E0F-AC69-43E3-9F6C-08BD579A0FB2}
+	EndGlobalSection
+EndGlobal
