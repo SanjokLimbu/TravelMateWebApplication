@@ -136,7 +136,7 @@ namespace TravelMate.Controllers
             var newApplicationUser = await _userManager.FindByIdAsync(userId);
             if(userId == null)
             {
-                ViewBag.Errormessage = $"The user ID {userId} is Invalid";
+                ViewBag.ErrorMessage = $"The user ID {userId} is Invalid";
                 return View("Error");
             }
             var result = await _userManager.ConfirmEmailAsync(newApplicationUser, token);
@@ -144,7 +144,7 @@ namespace TravelMate.Controllers
             {
                 return View("Login");
             }
-            ViewBag.Errormessage = "Email canot be confirmed";
+            ViewBag.ErrorMessage = "Email canot be confirmed";
             return View("Error");
         }
         /// <summary>
@@ -188,10 +188,59 @@ namespace TravelMate.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToPage("/Index");
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View("ForgotPassword");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel forgotPasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
+                if(user != null && await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var forgotPasswordLink = Url.Action("ResetPassword", "Account", new { userId = user.Email, token }, Request.Scheme);
+                    await _mailService.SendEmailAsync(forgotPasswordModel.Email, "Reset Password", forgotPasswordLink);
+                }
+                ViewBag.ErrorMessage = "The reset password link has been sent to the email provided. Please check your Inbox.";
+                return View("Error");
+            }
+            ViewBag.ErrorMessage = "The reset password link has been sent to the email provided. Please check your Inbox.";
+            return View("Error");
+        }
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset token");
+            }
+            return View("ResetPassword");
+        }
+        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+                if(user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+                    if (result.Succeeded)
+                    {
+                        ViewBag.ErrorMessage = "Password has been reset.";
+                        return View("Error");
+                    }
+                    foreach(var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(resetPassword);
+                }
+            }
+            return View(resetPassword);
         }
     }
 }
