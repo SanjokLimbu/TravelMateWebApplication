@@ -108,7 +108,7 @@ namespace TravelMate.Controllers
                 if (newApplicationUser.Succeeded)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = newUser.Id, token }, Request.Scheme);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { email = newUser.Id, token }, Request.Scheme);
                     await _mailService.SendEmailAsync(registration.Email, "Account Confirmation", confirmationLink);
                     return View("Login");
                 }
@@ -193,6 +193,11 @@ namespace TravelMate.Controllers
         {
             return View("ForgotPassword");
         }
+        /// <summary>
+        /// Send same error message regardless if the email is registered or not
+        /// </summary>
+        /// <param name="forgotPasswordModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel forgotPasswordModel)
         {
@@ -202,13 +207,13 @@ namespace TravelMate.Controllers
                 if(user != null && await _userManager.IsEmailConfirmedAsync(user))
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var forgotPasswordLink = Url.Action("ResetPassword", "Account", new { userId = user.Email, token }, Request.Scheme);
+                    var forgotPasswordLink = Url.Action("ResetPassword", "Account", new { email = user.Email, token }, Request.Scheme);
                     await _mailService.SendEmailAsync(forgotPasswordModel.Email, "Reset Password", forgotPasswordLink);
                 }
                 ViewBag.ErrorMessage = "The reset password link has been sent to the email provided. Please check your Inbox.";
                 return View("Error");
             }
-            ViewBag.ErrorMessage = "The reset password link has been sent to the email provided. Please check your Inbox.";
+            ViewBag.ErrorMessage = "The reset password link has been sent to the email you provided. Please check your Inbox.";
             return View("Error");
         }
         [HttpGet]
@@ -220,6 +225,12 @@ namespace TravelMate.Controllers
             }
             return View("ResetPassword");
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resetPassword"></param>
+        /// <returns></returns>
+        [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
         {
             if (ModelState.IsValid)
