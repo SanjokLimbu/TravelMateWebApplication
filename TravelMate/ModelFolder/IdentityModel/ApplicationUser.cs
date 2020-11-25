@@ -13,5 +13,6 @@ namespace TravelMate.ModelFolder.IdentityModel
         public string Country { get; set; }
         [Required]
         public int Gender { get; set; }
+        public byte[] ImageData { get; set; }
     }
 }

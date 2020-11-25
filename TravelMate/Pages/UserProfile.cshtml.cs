@@ -1,32 +1,102 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using TravelMate.ModelFolder.CountryModel;
 using TravelMate.ModelFolder.IdentityModel;
-using TravelMate.ModelFolder.ProfileModel;
 
 namespace TravelMate.Pages
 {
     public class UserProfileModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        public readonly IWebHostEnvironment _env;
 
         public UserProfileModel(UserManager<ApplicationUser> userManager,
-                                SignInManager<ApplicationUser> signInManager)
+                                IWebHostEnvironment env)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
+            _env = env;
         }
-        public async Task<IActionResult> OnPut(Profile profile)
+        [BindProperty]
+        [Required]
+        [MaxLength(30, ErrorMessage = "USERNAME CANNOT EXCEED 30 LETTERS.")]
+        public string Name { get; set; }
+        [BindProperty]
+        [Required]
+        [DataType(DataType.Date)]
+        public string DateOfBirth { get; set; }
+        [BindProperty]
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email Address")]
+        public string Email { get; set; }
+        [BindProperty]
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        public string Mobile { get; set; }
+        [BindProperty]
+        [Required]
+        public int Gender { get; set; }
+        [BindProperty]
+        [Required]
+        public string Country { get; set; }
+        [BindProperty]
+        public IFormFile Image { get; set; }
+        public List<SelectListItem> Countrydropdownlist { get; set; }
+        public void OnGet()
+        {
+            Countrydropdownlist = GetCountryItems();
+        }
+        public List<SelectListItem> GetCountryItems()
+        {
+            string filepath = Path.Combine(_env.ContentRootPath, "CountryList.json");
+            string jsonlist = System.IO.File.ReadAllText(filepath);
+            var result = JsonConvert.DeserializeObject<RootCountry>(jsonlist);
+            List<SelectListItem> _countrydropdownlist = new List<SelectListItem>();
+            foreach (var nation in result.Countries)
+            {
+                _countrydropdownlist.Add(new SelectListItem { Value = nation.Code.ToString(), Text = nation.Name });
+            }
+            return _countrydropdownlist;
+        }
+        public async Task<IActionResult> OnPostUpdate()
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(profile.Email);
-                //if (user != null && (await _signInManager.IsSignedIn(user))
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                user.Name = Name;
+                user.DateOfBirth = DateOfBirth;
+                user.PhoneNumber = Mobile;
+                user.Email = Email;
+                user.Country = Country;
+                user.Gender = Gender;
+                if(Image != null)
+                {
+                    if(Image.Length > 0)
+                    {
+                        using var streamReader = Image.OpenReadStream();
+                        using var memoryStream = new MemoryStream();
+                        streamReader.CopyTo(memoryStream);
+                        byte[] uploadedImage = memoryStream.ToArray();
+                        user.ImageData = uploadedImage;
+                    }
+                }
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    //Repopulate dropdownlist
+                    Countrydropdownlist = GetCountryItems();
+                    return Page();
+                }
             }
             return Page();
         }

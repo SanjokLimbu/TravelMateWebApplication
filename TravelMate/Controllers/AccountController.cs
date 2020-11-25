@@ -77,8 +77,7 @@ namespace TravelMate.Controllers
         /// <param name="registration"></param>
         /// <returns></returns>
         [HttpPost]
-        [ActionName("Register")]
-        public async Task<IActionResult> RegisterUser(Registration registration)
+        public async Task<IActionResult> Register(Registration registration)
         {
             if (ModelState.IsValid)
             {
@@ -154,8 +153,7 @@ namespace TravelMate.Controllers
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpPost]
-        [ActionName("Login")]
-        public async Task<IActionResult> LoginUser(Logins Login, string returnUrl)
+        public async Task<IActionResult> Login(Logins Login, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -225,11 +223,6 @@ namespace TravelMate.Controllers
             }
             return View("ResetPassword");
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="resetPassword"></param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
         {

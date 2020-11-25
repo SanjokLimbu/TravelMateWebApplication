@@ -29,7 +29,7 @@ namespace TravelMate.InterfaceFolder
             var from = new EmailAddress("annoyingthreat@gmail.com", "Limbuwan");
             var to = new EmailAddress(toEmail);
             var msg = MailHelper.CreateSingleEmail(from, to, subject, content, content);
-            var response = await client.SendEmailAsync(msg);
+            await client.SendEmailAsync(msg);
         }
     }
 }
