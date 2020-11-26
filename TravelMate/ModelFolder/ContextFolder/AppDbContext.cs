@@ -13,11 +13,10 @@ namespace TravelMate.ModelFolder.ContextFolder
         }
         public DbSet<CoronaListCountryContext> CoronaListCountries { get; set; }
         public DbSet<GlobalCasesContext> GlobalContexts { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelbuilder);
-            modelbuilder.Entity<GlobalCasesContext>().ToTable("GlobalContexts").HasKey(GlobalContexts => GlobalContexts.Id);
-            modelbuilder.Entity<CoronaListCountryContext>().ToTable("CoronaListCountries").HasKey(CoronaListCountryContext => CoronaListCountryContext.Id);
+            base.OnModelCreating(builder);
+            builder.Entity<CoronaListCountryContext>().HasIndex(U => U.Country).IsUnique();
         }
     }
 }

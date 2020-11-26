@@ -6,31 +6,41 @@ using TravelMate.ModelFolder.GlobalCoronaModel;
 
 namespace TravelMate.Service
 {
-    public class GetGlobalCovidData
+    public class GetGlobalCovidData : IGetGlobalCovidData
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
         public GetGlobalCovidData(AppDbContext context)
         {
             _context = context;
-        }
-        //Empty Constructor to instantiate class in TimedHostedServices
-        public GetGlobalCovidData()
-        {
-                
         }
         public async Task GetData()
         {
             string dataUrl = "https://api.covid19api.com/summary";
             string response = await ApiInitialization.GetClient.GetStringAsync(dataUrl);
             var globalCovidData = JsonConvert.DeserializeObject<GlobalDetails>(response);
-            _context.GlobalContexts.Add(new GlobalCasesContext()
+            var countryCovidData = JsonConvert.DeserializeObject<CoronaListCountry>(response);
+            foreach (var data in countryCovidData.Countries)
             {
-               NewConfirmed = globalCovidData.Global.NewConfirmed,
-               TotalConfirmed = globalCovidData.Global.TotalConfirmed,
-               NewDeaths = globalCovidData.Global.NewDeaths,
-               TotalDeaths = globalCovidData.Global.TotalDeaths,
-               NewRecovered = globalCovidData.Global.NewRecovered,
-               TotalRecovered = globalCovidData.Global.TotalRecovered
+                _context.CoronaListCountries.Update(new CoronaListCountryContext()
+                {
+                    Country = data.Country,
+                    NewConfirmed = data.NewConfirmed,
+                    TotalConfirmed = data.TotalConfirmed,
+                    NewDeaths = data.NewDeaths,
+                    TotalDeaths = data.TotalDeaths,
+                    NewRecovered = data.NewRecovered,
+                    TotalRecovered = data.TotalRecovered,
+                    Date = data.Date
+                });
+            }
+            _context.GlobalContexts.Update(new GlobalCasesContext()
+            {
+                NewConfirmed = globalCovidData.Global.NewConfirmed,
+                TotalConfirmed = globalCovidData.Global.TotalConfirmed,
+                NewDeaths = globalCovidData.Global.NewDeaths,
+                TotalDeaths = globalCovidData.Global.TotalDeaths,
+                NewRecovered = globalCovidData.Global.NewRecovered,
+                TotalRecovered = globalCovidData.Global.TotalRecovered
             });
             _context.SaveChanges();
         }

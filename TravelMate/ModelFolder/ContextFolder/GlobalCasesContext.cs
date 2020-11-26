@@ -10,17 +10,11 @@ namespace TravelMate.ModelFolder.ContextFolder
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public int NewConfirmed { get; set; }
-        [Required]
         public int TotalConfirmed { get; set; }
-        [Required]
         public int NewDeaths { get; set; }
-        [Required]
         public int TotalDeaths { get; set; }
-        [Required]
         public int NewRecovered { get; set; }
-        [Required]
         public int TotalRecovered { get; set; }
     }
 }

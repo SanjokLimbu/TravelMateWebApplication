@@ -159,10 +159,9 @@ namespace TravelMate.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Date")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NewConfirmed")
@@ -184,6 +183,9 @@ namespace TravelMate.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Country")
+                        .IsUnique();
 
                     b.ToTable("CoronaListCountries");
                 });

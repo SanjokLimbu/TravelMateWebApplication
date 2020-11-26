@@ -10,7 +10,7 @@ using TravelMate.ModelFolder.ContextFolder;
 namespace TravelMate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201125014252_CovidDataUpdate")]
+    [Migration("20201126104741_CovidDataUpdate")]
     partial class CovidDataUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,10 +161,9 @@ namespace TravelMate.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Date")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NewConfirmed")
@@ -186,6 +185,9 @@ namespace TravelMate.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Country")
+                        .IsUnique();
 
                     b.ToTable("CoronaListCountries");
                 });

@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TravelMate.InterfaceFolder;
 using TravelMate.ModelFolder.ContextFolder;
 
 namespace TravelMate.Service
@@ -11,6 +13,12 @@ namespace TravelMate.Service
     public class TimedHostedServices : IHostedService, IDisposable
     {
         private Timer _timer;
+        private readonly IServiceProvider _service;
+
+        public TimedHostedServices(IServiceProvider service)
+        {
+            _service = service;
+        }
         public void Dispose()
         {
             _timer?.Dispose();
@@ -19,16 +27,19 @@ namespace TravelMate.Service
         public Task StartAsync(CancellationToken cancellationToken)
         {
             var autoEvent = new AutoResetEvent(true);
-            // Create a timer that invokes CheckStatus after 20 second, 
+            // Create a timer that invokes CheckStatus after 10 second, 
             // and every 1 hour thereafter.
-            _timer = new Timer(CallHttpData, autoEvent, 20000, 3600000);
-            return Task.CompletedTask;
+            _timer = new Timer(DoWork, autoEvent, 10000, 30000);
+             return Task.CompletedTask;
         }
-        private async void CallHttpData(object state)
+        private async void DoWork(object state)
         {
-            ApiInitialization.InitializeClient();
-            var covidData = new GetGlobalCovidData();
-            await covidData.GetData();
+            using (var scope = _service.CreateScope())
+            {
+                var getGlobalCovidData = scope.ServiceProvider.GetRequiredService<IGetGlobalCovidData>();
+                ApiInitialization.InitializeClient();
+                await getGlobalCovidData.GetData();
+        }
         }
         public Task StopAsync(CancellationToken cancellationToken)
         {

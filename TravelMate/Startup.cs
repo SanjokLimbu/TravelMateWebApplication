@@ -32,8 +32,8 @@ namespace TravelMate
             .AddDefaultTokenProviders();
             services.AddTransient<IMailService, SendGridMailService>();
             services.AddHostedService<TimedHostedServices>();
+            services.AddScoped<IGetGlobalCovidData, GetGlobalCovidData>();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
