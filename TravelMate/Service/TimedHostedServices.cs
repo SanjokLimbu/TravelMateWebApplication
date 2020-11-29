@@ -34,12 +34,10 @@ namespace TravelMate.Service
         }
         private async void DoWork(object state)
         {
-            using (var scope = _service.CreateScope())
-            {
-                var getGlobalCovidData = scope.ServiceProvider.GetRequiredService<IGetGlobalCovidData>();
-                ApiInitialization.InitializeClient();
-                await getGlobalCovidData.GetData();
-        }
+            using var scope = _service.CreateScope();
+            var getGlobalCovidData = scope.ServiceProvider.GetRequiredService<IGetGlobalCovidData>();
+            ApiInitialization.InitializeClient();
+            await getGlobalCovidData.GetData();
         }
         public Task StopAsync(CancellationToken cancellationToken)
         {

@@ -5,8 +5,6 @@ namespace TravelMate.ModelFolder.GlobalCoronaModel
 {
     public class CoronaListCountryDetails
     {
-        [Key]
-        public int Id { get; set; }
         [JsonProperty("Country")]
         public string Country { get; set; }
         [JsonProperty("NewConfirmed")]

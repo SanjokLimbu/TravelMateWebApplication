@@ -7,7 +7,6 @@ namespace TravelMate.ModelFolder.GlobalCoronaModel
 {
     public class GlobalCases
     {
-        [Key]
         public int Id { get; set; }
         [JsonProperty("NewConfirmed")]
         public int NewConfirmed { get; set; }

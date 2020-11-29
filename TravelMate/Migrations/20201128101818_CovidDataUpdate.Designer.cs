@@ -10,7 +10,7 @@ using TravelMate.ModelFolder.ContextFolder;
 namespace TravelMate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201126104741_CovidDataUpdate")]
+    [Migration("20201128101818_CovidDataUpdate")]
     partial class CovidDataUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

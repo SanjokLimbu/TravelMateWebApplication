@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using TravelMate.InterfaceFolder;
 using TravelMate.ModelFolder.ContextFolder;
@@ -19,30 +20,26 @@ namespace TravelMate.Service
             string response = await ApiInitialization.GetClient.GetStringAsync(dataUrl);
             var globalCovidData = JsonConvert.DeserializeObject<GlobalDetails>(response);
             var countryCovidData = JsonConvert.DeserializeObject<CoronaListCountry>(response);
+            CoronaListCountryContext coronaList = new CoronaListCountryContext();
             foreach (var data in countryCovidData.Countries)
             {
-                _context.CoronaListCountries.Update(new CoronaListCountryContext()
-                {
-                    Country = data.Country,
-                    NewConfirmed = data.NewConfirmed,
-                    TotalConfirmed = data.TotalConfirmed,
-                    NewDeaths = data.NewDeaths,
-                    TotalDeaths = data.TotalDeaths,
-                    NewRecovered = data.NewRecovered,
-                    TotalRecovered = data.TotalRecovered,
-                    Date = data.Date
-                });
+                coronaList.Country = data.Country;
+                coronaList.TotalConfirmed = data.TotalConfirmed;
+                coronaList.NewConfirmed = data.NewConfirmed;
+                coronaList.TotalDeaths = data.TotalDeaths;
+                coronaList.NewDeaths = data.NewDeaths;
+                coronaList.TotalRecovered = data.TotalRecovered;
+                coronaList.NewRecovered = data.NewRecovered;
+                coronaList.Date = data.Date;
             }
-            _context.GlobalContexts.Update(new GlobalCasesContext()
-            {
-                NewConfirmed = globalCovidData.Global.NewConfirmed,
-                TotalConfirmed = globalCovidData.Global.TotalConfirmed,
-                NewDeaths = globalCovidData.Global.NewDeaths,
-                TotalDeaths = globalCovidData.Global.TotalDeaths,
-                NewRecovered = globalCovidData.Global.NewRecovered,
-                TotalRecovered = globalCovidData.Global.TotalRecovered
-            });
-            _context.SaveChanges();
+            GlobalCasesContext globalCases = new GlobalCasesContext();
+            globalCases.NewConfirmed = globalCovidData.Global.NewConfirmed;
+            globalCases.TotalConfirmed = globalCovidData.Global.TotalConfirmed;
+            globalCases.NewDeaths = globalCovidData.Global.NewDeaths;
+            globalCases.TotalDeaths = globalCovidData.Global.TotalDeaths;
+            globalCases.NewRecovered = globalCovidData.Global.NewRecovered;
+            globalCases.TotalRecovered = globalCovidData.Global.TotalRecovered;
+            await _context.SaveChangesAsync();
         }
     }
 }
