@@ -1,5 +1,20 @@
 ﻿@page
 @model TravelMate.Pages.IndexModel
-@{
-    ViewBag.Title = "Home Page";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no" />
+    @{
+        ViewBag.Title = "TravelMate";
+    }
+    <script src="~/jquery/jquery.js"></script>
+    <script src="~/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/CustomScriptCode/GlobalChart.js"></script>
+</head>
+<body>
+    <div id="ChartForGlobal" style="width: 900px; height: 500px;"></div>
+</body>
+</html>

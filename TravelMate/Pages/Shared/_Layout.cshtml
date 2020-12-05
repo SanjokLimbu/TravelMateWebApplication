@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">
-                    <img src="~/Image/TravelMate.jpg" width="30" height="30"/>
+                    <img src="~/Image/TravelMate.jpg" width="30" height="30" />
                     TravelMate
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
                             <li class="nav-item">
                                 <form method="post" asp-controller="Account" asp-action="LogOut">
                                     <button type="submit" class="nav-link text-dark btn btn-link py-0" style="width:auto">
-                                    Logout @User.Identity.Name
+                                        Logout @User.Identity.Name
                                     </button>
                                 </form>
                             </li>
@@ -62,7 +62,7 @@
     {
         @RenderSection("Scripts", required: true)
     }
-    <script src="~/jquery/jquery.slim.min.js"></script>
+    <script src="~/jquery/jquery.min.js"></script>
     <script src="~/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
