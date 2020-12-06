@@ -9,6 +9,6 @@ namespace TravelMate.InterfaceFolder
     public interface ICountriesCovidData
     {
         List<CoronaListCountryContext> CovidDataToDisplay();
-        GlobalCasesContext GlobalDataToDisplay();
+        List<GlobalCasesContext> GlobalDataToDisplay();
     }
 }

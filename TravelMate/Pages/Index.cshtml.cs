@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Linq;
@@ -5,6 +6,7 @@ using TravelMate.ModelFolder.ContextFolder;
 
 namespace TravelMate.Pages
 {
+    [AllowAnonymous]
     public class IndexModel : PageModel
     {
         private readonly AppDbContext _context;

@@ -1,0 +1,75 @@
+﻿@page
+@model TravelMate.Pages.Shared.DisplayDataModel
+@{
+    ViewBag.Title = "Numbers by Countries";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no" />
+</head>
+<body>
+    <h3>Global Data</h3>
+    <table style="width:100%" border="1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>New Confirmed</th>
+                <th>Total Confirmed</th>
+                <th>New Deaths</th>
+                <th>Total Deaths</th>
+                <th>New Recovered</th>
+                <th>Total Recovered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nation in Model.GlobalDataForPage)
+            {
+                <tr>
+                    <td>@nation.Id</td>
+                    <td>@nation.NewConfirmed</td>
+                    <td>@nation.TotalConfirmed</td>
+                    <td>@nation.NewDeaths</td>
+                    <td>@nation.TotalDeaths</td>
+                    <td>@nation.NewRecovered</td>
+                    <td>@nation.TotalRecovered</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <h3>Country List Data</h3>
+    <table style="width:100%" border="1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Country</th>
+                <th>New Confirmed</th>
+                <th>Total Confirmed</th>
+                <th>New Deaths</th>
+                <th>Total Deaths</th>
+                <th>New Recovered</th>
+                <th>Total Recovered</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nation in Model.CovidDataForpage)
+            {
+                <tr>
+                    <td>@nation.Id</td>
+                    <td>@nation.Country</td>
+                    <td>@nation.NewConfirmed</td>
+                    <td>@nation.TotalConfirmed</td>
+                    <td>@nation.NewDeaths</td>
+                    <td>@nation.TotalDeaths</td>
+                    <td>@nation.NewRecovered</td>
+                    <td>@nation.TotalRecovered</td>
+                    <td>@nation.Date</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

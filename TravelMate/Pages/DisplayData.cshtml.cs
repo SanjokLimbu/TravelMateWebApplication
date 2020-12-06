@@ -12,22 +12,27 @@ namespace TravelMate.Pages.Shared
     public class DisplayDataModel : PageModel, ICountriesCovidData
     {
         private readonly AppDbContext _Context;
-        private List<CoronaListCountryContext> CovidForpage;
-        private GlobalCasesContext GlobalForPage;
+        public List<CoronaListCountryContext> CovidDataForpage;
+        public List<GlobalCasesContext> GlobalDataForPage;
 
         public List<CoronaListCountryContext> CovidDataToDisplay()
         {
-            throw new NotImplementedException();
+            var countryCovidData = _Context.CoronaListCountries.ToList();
+            return countryCovidData;
         }
-
-        public GlobalCasesContext GlobalDataToDisplay()
+        public List<GlobalCasesContext> GlobalDataToDisplay()
         {
-            throw new NotImplementedException();
+            var globalCovidData = _Context.GlobalContexts.ToList();
+            return globalCovidData;
         }
-
         public DisplayDataModel(AppDbContext context)
         {
             _Context = context;
+        }
+        public void OnGet()
+        {
+            CovidDataForpage = CovidDataToDisplay();
+            GlobalDataForPage = GlobalDataToDisplay();
         }
     }
 }
