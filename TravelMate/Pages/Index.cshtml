@@ -13,8 +13,18 @@
     <script src="~/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="~/CustomScriptCode/GlobalChart.js"></script>
+    <script src="~/CustomScriptCode/CountryChart.js"></script>
 </head>
 <body>
     <div id="ChartForGlobal" style="width: 900px; height: 500px;"></div>
+    <br />
+    <h3>Select Country Name</h3>
+    <form method="Post">
+        <div class="form-group">
+            <select asp-for="Country" asp-items="@Model.Country" id="SearchBox" name="SearchBox">
+            </select>
+        </div>
+    </form>
+    <div id="ChartForCountry" style="width: 900px; height: 500px;"></div>
 </body>
 </html>

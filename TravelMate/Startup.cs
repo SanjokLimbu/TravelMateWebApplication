@@ -42,6 +42,7 @@ namespace TravelMate
                 .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

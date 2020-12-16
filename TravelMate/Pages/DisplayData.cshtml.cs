@@ -9,12 +9,11 @@ using TravelMate.ModelFolder.ContextFolder;
 
 namespace TravelMate.Pages.Shared
 {
-    public class DisplayDataModel : PageModel, ICountriesCovidData
+    public class DisplayDataModel : PageModel
     {
         private readonly AppDbContext _Context;
         public List<CoronaListCountryContext> CovidDataForpage;
         public List<GlobalCasesContext> GlobalDataForPage;
-
         public List<CoronaListCountryContext> CovidDataToDisplay()
         {
             var countryCovidData = _Context.CoronaListCountries.ToList();
