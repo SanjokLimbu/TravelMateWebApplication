@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject></StartupObject>
+    <UserSecretsId>e22dccaf-8b2b-481e-a1a9-80a4e9ab9451</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -29,7 +29,7 @@ namespace TravelMate.Service
             var autoEvent = new AutoResetEvent(true);
             // Create a timer that invokes CheckStatus after 10 second, 
             // and every 1 hour thereafter.
-            _timer = new Timer(DoWork, autoEvent, 10000, 30000);
+            _timer = new Timer(DoWork, autoEvent, 10000, 3600000);
              return Task.CompletedTask;
         }
         private async void DoWork(object state)
