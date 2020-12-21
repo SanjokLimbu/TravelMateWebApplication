@@ -248,6 +248,7 @@ namespace TravelMate.Controllers
             }
             return View(resetPassword);
         }
+        [HttpGet]
         public IActionResult AboutMe()
         {
             return View("AboutMe");

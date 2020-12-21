@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TravelMate.InterfaceFolder;
@@ -29,7 +27,7 @@ namespace TravelMate.Service
             var autoEvent = new AutoResetEvent(true);
             // Create a timer that invokes CheckStatus after 10 second, 
             // and every 1 hour thereafter.
-            _timer = new Timer(DoWork, autoEvent, 10000, 3600000);
+            _timer = new Timer(DoWork, autoEvent, 10000, 40000);
              return Task.CompletedTask;
         }
         private async void DoWork(object state)

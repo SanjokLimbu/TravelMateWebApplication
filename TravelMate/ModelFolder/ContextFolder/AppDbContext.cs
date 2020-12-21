@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using TravelMate.ModelFolder.GlobalCoronaModel;
 using TravelMate.ModelFolder.IdentityModel;
 
 namespace TravelMate.ModelFolder.ContextFolder

@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Configuration;
+using System;
+using System.Net;
+using System.Net.Security;
 using TravelMate.InterfaceFolder;
 using TravelMate.ModelFolder.ContextFolder;
 using TravelMate.ModelFolder.IdentityModel;
@@ -28,7 +29,14 @@ namespace TravelMate
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("Connection")));
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("AzureSqlConnection")));
+            }
+            else
+            {
+                services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("Connection")));
+            }
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
@@ -45,6 +53,12 @@ namespace TravelMate
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
+            ServicePointManager.ServerCertificateValidationCallback += //This code is security risk as it validates all certificates
+                (sender, certificate, chain, errors) =>                 //Not to be used for production and used this instance as I trust the 
+                {                                                       //The site I'm pulling data from
+                    return errors == SslPolicyErrors.None;
+                };
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
