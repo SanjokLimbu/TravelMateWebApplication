@@ -109,7 +109,7 @@ namespace TravelMate.Controllers
                 if (newApplicationUser.Succeeded)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { email = newUser.Id, token }, Request.Scheme);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = newUser.Id, token }, Request.Scheme);
                     await _mailService.SendEmailAsync(registration.Email, "Account Confirmation", confirmationLink);
                     return View("Login");
                 }

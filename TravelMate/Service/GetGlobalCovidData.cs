@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using TravelMate.InterfaceFolder;
 using TravelMate.ModelFolder.ContextFolder;
 using TravelMate.ModelFolder.GlobalCoronaModel;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace TravelMate.Service
 {
@@ -18,27 +20,32 @@ namespace TravelMate.Service
         {
             string dataUrl = "https://api.covid19api.com/summary";
             string response = await ApiInitialization.GetClient.GetStringAsync(dataUrl);
-            if(response != null)
+            if (response != null)
             {
                 var globalCovidData = JsonConvert.DeserializeObject<GlobalDetails>(response);
                 var countryCovidData = JsonConvert.DeserializeObject<CoronaListCountry>(response);
+                var countryQuery = _context.CoronaListCountries.First(); // retrieve entity
                 foreach (var data in countryCovidData.Countries)
                 {
-                    var countryQuery = _context.CoronaListCountries.Select(rows => rows); // Selects all rows from table
-                    foreach (var query in countryQuery)
-                    {
-                        query.Country = data.Country;
-                        query.NewConfirmed = data.NewConfirmed;
-                        query.TotalConfirmed = data.TotalConfirmed;
-                        query.NewDeaths = data.NewDeaths;
-                        query.TotalDeaths = data.TotalDeaths;
-                        query.NewRecovered = data.NewRecovered;
-                        query.TotalRecovered = data.TotalRecovered;
-                        query.Date = data.Date;
-                    }
-                    _context.Entry(countryQuery).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                    _context.Update(countryQuery);
+                    countryQuery.Country = data.Country;
+                    countryQuery.NewConfirmed = data.NewConfirmed;
+                    countryQuery.TotalConfirmed = data.TotalConfirmed;
+                    countryQuery.NewDeaths = data.NewDeaths;
+                    countryQuery.TotalDeaths = data.TotalDeaths;
+                    countryQuery.NewRecovered = data.NewRecovered;
+                    countryQuery.TotalRecovered = data.TotalRecovered;
+                    countryQuery.Date = data.Date;
                 }
+                _context.Entry(countryQuery).State = EntityState.Unchanged;
+                _context.Update(countryQuery);
+                var globalQuery = _context.GlobalContexts.First();
+                globalQuery.NewConfirmed = globalCovidData.Global.NewConfirmed;
+                globalQuery.TotalConfirmed = globalCovidData.Global.TotalConfirmed;
+                globalQuery.NewDeaths = globalCovidData.Global.NewDeaths;
+                globalQuery.TotalDeaths = globalCovidData.Global.TotalDeaths;
+                globalQuery.NewRecovered = globalCovidData.Global.NewRecovered;
+                globalQuery.TotalRecovered = globalCovidData.Global.TotalRecovered;
+                _context.Entry(globalQuery).State = EntityState.Modified;
                 _context.SaveChanges();
             }
         }
