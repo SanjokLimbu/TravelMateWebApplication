@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using TravelMate.ModelFolder.ContextFolder;
 using TravelMate.ModelFolder.CountryModel;
 using TravelMate.ModelFolder.IdentityModel;
 
@@ -19,12 +20,15 @@ namespace TravelMate.Pages
     {
         private readonly UserManager<ApplicationUser> _userManager;
         public readonly IWebHostEnvironment _env;
+        private readonly AppDbContext _context;
 
         public UserProfileModel(UserManager<ApplicationUser> userManager,
-                                IWebHostEnvironment env)
+                                IWebHostEnvironment env,
+                                AppDbContext context)
         {
             _userManager = userManager;
             _env = env;
+            _context = context;
         }
         [BindProperty]
         [Required]
@@ -50,11 +54,15 @@ namespace TravelMate.Pages
         [Required]
         public string Country { get; set; }
         [BindProperty]
-        public IFormFile Image { get; set; }
+        public IFormFile Images { get; set; }
+        public byte[] ProfileImage { get; set; }
         public List<SelectListItem> Countrydropdownlist { get; set; }
         public void OnGet()
         {
             Countrydropdownlist = GetCountryItems();
+            
+            var thisuser = _context.Users.Where(name => name.Name == User.Identity.Name).FirstOrDefault();
+            ProfileImage = thisuser.ImageData;
         }
         public List<SelectListItem> GetCountryItems()
         {
@@ -79,11 +87,11 @@ namespace TravelMate.Pages
                 user.Email = Email;
                 user.Country = Country;
                 user.Gender = Gender;
-                if(Image != null)
+                if(Images != null)
                 {
-                    if(Image.Length > 0)
+                    if(Images.Length > 0)
                     {
-                        using var streamReader = Image.OpenReadStream();
+                        using var streamReader = Images.OpenReadStream();
                         using var memoryStream = new MemoryStream();
                         streamReader.CopyTo(memoryStream);
                         byte[] uploadedImage = memoryStream.ToArray();

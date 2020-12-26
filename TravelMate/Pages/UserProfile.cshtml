@@ -20,7 +20,14 @@
         <div class="row">
             <div class="col text-center">
                 <br />
-                   <img src="~/Image/GeneralUser.jpg" alt="User Image" style="height: 300px">
+                @if (Model.ProfileImage != null)
+                {
+                    <img src="@string.Format("data:image/png;base64,{0}",Convert.ToBase64String(Model.ProfileImage))" alt="User Image" style="height: 300px" />
+                }
+                else
+                {
+                    <img src="~/Image/GeneralUser.jpg" alt="User Image" style="height: 300px">
+                }
                 <br />
             </div>
         </div>
@@ -81,9 +88,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="Image"></label>
+                        <label asp-for="Images"></label>
                         <div class="custom-file">
-                            <input asp-for="Image" class="form-control custom-file-input" />
+                            <input asp-for="Images" class="form-control custom-file-input" />
                             <label class="custom-file-label">Choose File...</label>
                         </div>
                     </div>
