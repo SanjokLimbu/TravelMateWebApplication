@@ -22,8 +22,12 @@ namespace TravelMate.Service
             string response = await ApiInitialization.GetClient.GetStringAsync(dataUrl);
             if (response != null)
             {
-                var globalCovidData = JsonConvert.DeserializeObject<GlobalDetails>(response);
-                var countryCovidData = JsonConvert.DeserializeObject<CoronaListCountry>(response);
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+                var globalCovidData = JsonConvert.DeserializeObject<GlobalDetails>(response, settings);
+                var countryCovidData = JsonConvert.DeserializeObject<CoronaListCountry>(response, settings);
                 var countryQuery = _context.CoronaListCountries.First(); // retrieve entity
                 foreach (var data in countryCovidData.Countries)
                 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using TravelMate.InterfaceFolder;
+using TravelMate.ModelFolder.ContextFolder;
 using TravelMate.ModelFolder.CountryModel;
 using TravelMate.ModelFolder.IdentityModel;
 using TravelMate.ModelFolder.RegistrationModel;
@@ -21,15 +23,28 @@ namespace TravelMate.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMailService _mailService;
         private readonly IWebHostEnvironment _env;
+        private readonly AppDbContext _context;
+
         public AccountController(UserManager<ApplicationUser> userManager,
                                 SignInManager<ApplicationUser> signInManager,
                                 IMailService mailService,
-                                IWebHostEnvironment env)
+                                IWebHostEnvironment env,
+                                AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailService = mailService;
             _env = env;
+            _context = context;
+        }
+        public ActionResult GetData()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var thisuser = _context.Users.Where(name => name.Name == User.Identity.Name).FirstOrDefault();
+                return new JsonResult(thisuser.ImageData);
+            }
+            return RedirectToPage("/Index");
         }
         public List<SelectListItem> GetCountryItems()
         {
@@ -42,14 +57,6 @@ namespace TravelMate.Controllers
                 _countrydropdownlist.Add(new SelectListItem { Value = nation.Code.ToString(), Text = nation.Name });
             }
             return _countrydropdownlist;
-        }
-        /// <summary>
-        /// Sets default controller route to index page
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Index()
-        {
-            return View();
         }
         /// <summary>
         ///    This Action return Register View once clicked on Register button

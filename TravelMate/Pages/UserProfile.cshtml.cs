@@ -60,7 +60,6 @@ namespace TravelMate.Pages
         public void OnGet()
         {
             Countrydropdownlist = GetCountryItems();
-            
             var thisuser = _context.Users.Where(name => name.Name == User.Identity.Name).FirstOrDefault();
             ProfileImage = thisuser.ImageData;
         }
