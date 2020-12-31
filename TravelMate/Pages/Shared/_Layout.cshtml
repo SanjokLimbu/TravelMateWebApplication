@@ -29,6 +29,12 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-page="/DisplayData">Covid Data</a>
                     </li>
+                    @if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Administration" asp-action="ListRoles">Manage Roles</a>
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
