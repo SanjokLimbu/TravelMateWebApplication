@@ -19,4 +19,4 @@ program language -c#,
 script - JS, Jquery, Ajax,
 framework- .Net Core,
 server- Azure SQL server
-Visual Studio Community version
+tools- Visual Studio Community version
