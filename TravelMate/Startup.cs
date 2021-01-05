@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Security;
 using TravelMate.InterfaceFolder;
@@ -57,7 +59,7 @@ namespace TravelMate
                 .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
             //ServicePointManager.ServerCertificateValidationCallback += //This code is security risk as it validates all certificates
             //    (sender, certificate, chain, errors) =>                 //Not to be used for production and used this instance as I trust the 
             //    {                                                       //The site I'm pulling data from

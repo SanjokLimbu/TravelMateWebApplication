@@ -22,13 +22,6 @@ namespace TravelMate.Controllers
             _userManager = userManager;
         }
         [HttpGet]
-        [AllowAnonymous]
-        public IActionResult AccessDenied()
-        {
-            ViewBag.ErrorMessage = "The user do not have permission to view this page.";
-            return View("Error");
-        }
-        [HttpGet]
         public IActionResult CreateRole()
         {
             return View();
@@ -53,12 +46,9 @@ namespace TravelMate.Controllers
                 Id = role.Id,
                 RoleName = role.Name
             };
-            foreach (var user in _userManager.Users)
+            foreach (var user in await _userManager.GetUsersInRoleAsync(role.Name))
             {
-                if (await _userManager.IsInRoleAsync(user, role.Name))
-                {
-                    model.Users.Add(user.UserName);
-                }
+                model.Users.Add(user.UserName);
             }
             return View(model);
         }
@@ -73,21 +63,18 @@ namespace TravelMate.Controllers
                 return View("Error");
             }
             var model = new List<UserRoleModel>();
-            foreach (var user in _userManager.Users)
+            var allUser = _userManager.Users;
+            var usersInThisRole = await _userManager.GetUsersInRoleAsync(role.Name);
+            foreach(var user in allUser)
             {
                 var userRoleModel = new UserRoleModel
                 {
                     UserId = user.Id,
-                    UserName = user.UserName
+                    UserName = user.Name,
+                    IsSelected = false
                 };
-                if (await _userManager.IsInRoleAsync(user, role.Name))
-                {
+                if (usersInThisRole.Any(userInThisRole => userInThisRole.Id == userRoleModel.UserId))
                     userRoleModel.IsSelected = true;
-                }
-                else
-                {
-                    userRoleModel.IsSelected = false;
-                }
                 model.Add(userRoleModel);
             }
             return View(model);
@@ -149,7 +136,7 @@ namespace TravelMate.Controllers
             for(int i =0; i < model.Count; i++)
             {
                var user = await _userManager.FindByIdAsync(model[i].UserId);
-                IdentityResult result = null;
+                IdentityResult result;
                 if (model[i].IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
                 {
                     result = await _userManager.AddToRoleAsync(user, role.Name);

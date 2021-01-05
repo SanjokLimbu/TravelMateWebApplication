@@ -58,6 +58,13 @@ namespace TravelMate.Controllers
             }
             return _countrydropdownlist;
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            ViewBag.ErrorMessage = "The user do not have permission to view this page.";
+            return View("Error");
+        }
         /// <summary>
         ///    This Action return Register View once clicked on Register button
         /// </summary>

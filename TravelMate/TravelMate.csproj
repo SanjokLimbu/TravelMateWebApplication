@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\Client\**" />
+    <Content Remove="wwwroot\Client\**" />
+    <EmbeddedResource Remove="wwwroot\Client\**" />
+    <None Remove="wwwroot\Client\**" />
+    <TypeScriptCompile Remove="wwwroot\Client\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\Image\TravelMate.jpg" />
   </ItemGroup>
 
@@ -19,6 +27,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

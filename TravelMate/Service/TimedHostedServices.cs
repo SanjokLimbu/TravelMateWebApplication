@@ -34,7 +34,7 @@ namespace TravelMate.Service
         private async void DoWork(object state)
         {
             using var scope = _service.CreateScope();
-            scope.ServiceProvider.GetService<AppDbContext>().Database.Migrate();
+            //scope.ServiceProvider.GetService<AppDbContext>().Database.Migrate();
             var getGlobalCovidData = scope.ServiceProvider.GetRequiredService<IGetGlobalCovidData>();
             ApiInitialization.InitializeClient();
             await getGlobalCovidData.GetData();
