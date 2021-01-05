@@ -6,8 +6,6 @@ I'm an aspiring developer who has some form of experience in Level 1 Help desk o
 Project's Aim-
 The goal is to build a web applciation from scratch and add functions up to understand how certain
 pieces of project templates work together which would be difficult if I've used those built in templates instead.
-Aim 2-
-I will now use this template to make this Progressice web app
 
 This web application fetches data from another webiste and stores it in database to sort and display visual
 graph of Covid data of every country. ASP.NET Identity is featured for Role-based authorization and authentication
