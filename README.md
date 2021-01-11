@@ -10,7 +10,7 @@ pieces of project templates work together which would be difficult if I've used 
 This web application fetches data from another webiste and stores it in database to sort and display visual
 graph of Covid data of every country. ASP.NET Identity is featured for Role-based authorization and authentication
 while also using third-party application 'SendGrid' to send Emails signup confirmation. This application is timed to 
-fetch data every hour. Added Servoce worker for cache storage and offline viewing of some pages.
+fetch data every hour. Added Service worker for cache storage and offline viewing of some pages.
 
 Technologies-
 program language -c#,
