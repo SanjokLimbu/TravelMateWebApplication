@@ -18,3 +18,4 @@ script - JS, Jquery, Ajax,
 framework- .Net Core,
 server- Azure SQL server
 tools- Visual Studio Community version
+Live: https://limbu.azurewebsites.net/
